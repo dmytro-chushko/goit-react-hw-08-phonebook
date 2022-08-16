@@ -1,13 +1,18 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getIsLoggedIn } from 'redux/contacts/contactsSelectors';
+import { getIsLoggedIn, getUserName } from 'redux/contacts/contactsSelectors';
 import { setIsLoggedIn } from 'redux/contacts/contactsActions';
+import { useGetUserQuery } from 'redux/contacts/contactsOperations';
 
 const Header = () => {
   const isLoggedIn = useSelector(getIsLoggedIn);
-  console.log(isLoggedIn);
+  const userName = useSelector(getUserName);
   const dispatch = useDispatch();
+  const { data, isLoading } = useGetUserQuery();
+  console.log(data);
+
   const handleClick = () => dispatch(setIsLoggedIn(false));
+
   return (
     <>
       {!isLoggedIn ? (
@@ -18,6 +23,7 @@ const Header = () => {
       ) : (
         <>
           <NavLink to="contacts">Contacts</NavLink>
+          <p>Wellcome {userName}</p>
           <button type="button" onClick={handleClick}>
             quit
           </button>

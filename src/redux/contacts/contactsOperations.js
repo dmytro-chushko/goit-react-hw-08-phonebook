@@ -8,15 +8,19 @@ export const userAuthApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://connections-api.herokuapp.com/',
   }),
-  tagTypes: ['userAuthApi'],
+  tagTypes: ['User'],
   endpoints: builder => ({
+    getUser: builder.query({
+      query: () => ({ url: '/users/current' }),
+      providesTags: ['User'],
+    }),
     registerUser: builder.mutation({
       query: values => ({
         url: '/users/signup',
         method: 'POST',
         body: values,
       }),
-      invalidatesTages: ['userAuthApi'],
+      invalidatesTages: ['User'],
     }),
     loginUser: builder.mutation({
       query: values => ({
@@ -24,12 +28,16 @@ export const userAuthApi = createApi({
         method: 'POST',
         body: values,
       }),
-      invalidatesTages: ['userAuthApi'],
+      invalidatesTages: ['User'],
     }),
   }),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation } = userAuthApi;
+export const {
+  useGetUserQuery,
+  useRegisterUserMutation,
+  useLoginUserMutation,
+} = userAuthApi;
 
 // export const getContacts = createAsyncThunk(
 //   'contacts/getContacts',
