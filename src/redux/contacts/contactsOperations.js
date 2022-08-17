@@ -1,12 +1,16 @@
-import { Notify } from 'notiflix';
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import * as contactsAPI from 'services/contactsAPI';
 
 export const userAuthApi = createApi({
   reducerPath: 'userAuthApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://connections-api.herokuapp.com/',
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth.token;
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
+      return headers;
+    },
   }),
   tagTypes: ['User'],
   endpoints: builder => ({
@@ -30,6 +34,13 @@ export const userAuthApi = createApi({
       }),
       invalidatesTages: ['User'],
     }),
+    logOutUser: builder.mutation({
+      query: () => ({
+        url: '/users/logout',
+        method: 'POST',
+      }),
+      invalidatesTages: ['User'],
+    }),
   }),
 });
 
@@ -37,6 +48,7 @@ export const {
   useGetUserQuery,
   useRegisterUserMutation,
   useLoginUserMutation,
+  useLogOutUserMutation,
 } = userAuthApi;
 
 // export const getContacts = createAsyncThunk(

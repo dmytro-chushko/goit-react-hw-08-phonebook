@@ -1,7 +1,5 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useGetUserQuery } from 'redux/contacts/contactsOperations';
 
 // import css from './App.module.css';
 // import ContactForm from './ContactForm';
@@ -15,9 +13,6 @@ const Contacts = lazy(() => import('../pages/Contacts'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
 const App = () => {
-  const { data, isLoading } = useGetUserQuery();
-  console.log(data);
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Routes>

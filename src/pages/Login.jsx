@@ -1,23 +1,22 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLoginUserMutation } from 'redux/contacts/contactsOperations';
-import { setIsLoggedIn, setUserName } from 'redux/contacts/contactsActions';
+import { setToken } from 'redux/auth/authSlice';
+// import { setIsLoggedIn, setUserName } from 'redux/contacts/contactsActions';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPass] = useState('');
-  const [login, result] = useLoginUserMutation();
+  const [login] = useLoginUserMutation();
   const dispatch = useDispatch();
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const data = await login({ email, password });
-    if (data.data.token) {
-      dispatch(setIsLoggedIn(true));
-      dispatch(setUserName(data.data.user.name));
+    const result = await login({ email, password });
+    if (result.data) {
+      dispatch(setToken(result.data.token));
     }
-    console.log(result);
-    console.log(data);
+    console.log(result.data.token);
     setEmail('');
     setPass('');
   };
