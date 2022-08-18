@@ -1,28 +1,24 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux/es/exports';
-import { contactsOperations, contactsSelectors } from 'redux/contacts';
+import { useSelector } from 'react-redux/es/exports';
+import { useGetContactsQuery } from 'redux/contacts/contactsOperations';
+import { getFilter } from 'redux/contacts/getFilter';
 import css from './ContactList.module.css';
 import { getVisibleContacts } from 'helpers/getVisibleContacts';
 
 import ContactItem from 'components/ContactItem';
 
+// const filter = useSelector(getFilter);
+
 const ContactList = () => {
-  const { getContactsSelector, getFilterSelector } = contactsSelectors;
-  const contacts = useSelector(getContactsSelector);
-  const filter = useSelector(getFilterSelector);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(contactsOperations.getContacts());
-  }, [dispatch]);
-
+  const { data } = useGetContactsQuery();
+  console.log(data);
   return (
     <>
-      <ul className={css.list}>
+      <p>{data}</p>
+      {/* <ul className={css.list}>
         {getVisibleContacts(filter, contacts).map(({ id, name, phone }) => (
           <ContactItem key={id} id={id} name={name} phone={phone} />
         ))}
-      </ul>
+      </ul> */}
     </>
   );
 };

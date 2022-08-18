@@ -2,13 +2,12 @@ import { useDispatch } from 'react-redux';
 import {
   useGetUserQuery,
   useLogOutUserMutation,
-} from 'redux/contacts/contactsOperations';
+} from 'redux/auth/authOperations';
 import { unsetToken } from 'redux/auth/authSlice';
 
 export const UserMenu = () => {
   const dispatch = useDispatch();
   const { data, isLoading } = useGetUserQuery();
-  console.log(data);
   const [logOut] = useLogOutUserMutation();
 
   const handleClick = async () => {

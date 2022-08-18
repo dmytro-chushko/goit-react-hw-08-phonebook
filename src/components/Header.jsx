@@ -1,10 +1,10 @@
 import { NavLink, Outlet } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { UserMenu } from './UserMenu';
-import { getIsLoggedIn } from 'redux/auth/authSlice';
+import { getToken } from 'redux/auth/getToken';
 
 const Header = () => {
-  const isLoggedIn = useSelector(getIsLoggedIn);
+  const isLoggedIn = useSelector(getToken);
 
   return (
     <>

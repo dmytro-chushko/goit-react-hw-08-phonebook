@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLoginUserMutation } from 'redux/contacts/contactsOperations';
+import { useLoginUserMutation } from 'redux/auth/authOperations';
 import { setToken } from 'redux/auth/authSlice';
 // import { setIsLoggedIn, setUserName } from 'redux/contacts/contactsActions';
 

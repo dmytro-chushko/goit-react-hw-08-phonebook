@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export const userAuthApi = createApi({
-  reducerPath: 'userAuthApi',
+export const contactsApi = createApi({
+  reducerPath: 'contactsApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://connections-api.herokuapp.com/',
     prepareHeaders: (headers, { getState }) => {
@@ -12,44 +12,44 @@ export const userAuthApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User'],
+  tagTypes: ['Contacts'],
   endpoints: builder => ({
-    getUser: builder.query({
-      query: () => ({ url: '/users/current' }),
-      providesTags: ['User'],
+    getContacts: builder.query({
+      query: () => ({ url: '/contacts' }),
+      providesTags: ['Contacts'],
     }),
-    registerUser: builder.mutation({
+    addContact: builder.mutation({
       query: values => ({
-        url: '/users/signup',
+        url: '/contacts',
         method: 'POST',
         body: values,
       }),
-      invalidatesTages: ['User'],
+      invalidatesTages: ['Contacts'],
     }),
-    loginUser: builder.mutation({
-      query: values => ({
-        url: '/users/login',
-        method: 'POST',
+    updatingContact: builder.mutation({
+      query: (id, values) => ({
+        url: `/contacts/${id}`,
+        method: 'PATCH',
         body: values,
       }),
-      invalidatesTages: ['User'],
+      invalidatesTages: ['Contacts'],
     }),
-    logOutUser: builder.mutation({
-      query: () => ({
-        url: '/users/logout',
-        method: 'POST',
+    deleteContact: builder.mutation({
+      query: id => ({
+        url: `/contacts/${id}`,
+        method: 'DELETE',
       }),
-      invalidatesTages: ['User'],
+      invalidatesTages: ['Contacts'],
     }),
   }),
 });
 
 export const {
-  useGetUserQuery,
-  useRegisterUserMutation,
-  useLoginUserMutation,
-  useLogOutUserMutation,
-} = userAuthApi;
+  useGetContactsQuery,
+  useAddContactsMutation,
+  useUpdatingContactsMutation,
+  useDeleteContactsMutation,
+} = contactsApi;
 
 // export const getContacts = createAsyncThunk(
 //   'contacts/getContacts',
