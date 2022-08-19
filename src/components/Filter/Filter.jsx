@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { contactsActions, contactsSelectors } from 'redux/contacts';
+import { setFilter } from 'redux/contacts/contactsFilterSlice';
+import getFilter from 'redux/contacts/getFilter';
 import { nanoid } from 'nanoid';
 import css from './Filter.module.css';
 
@@ -8,7 +9,7 @@ import { IoIosSearch } from 'react-icons/io';
 const Filter = () => {
   const inputFilterId = nanoid();
   const dispatch = useDispatch();
-  const filter = useSelector(contactsSelectors.getFilterSelector);
+  const filter = useSelector(getFilter);
 
   return (
     <>
@@ -19,9 +20,7 @@ const Filter = () => {
           className={css.input}
           type="text"
           value={filter}
-          onChange={e =>
-            dispatch(contactsActions.setFilter(e.currentTarget.value))
-          }
+          onChange={e => dispatch(setFilter(e.currentTarget.value))}
         />
         <IoIosSearch className={css.searchIcon} />
       </label>
