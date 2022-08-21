@@ -1,5 +1,4 @@
 import { persistReducer } from 'redux-persist';
-// import { store } from 'redux/store';
 import { slice } from './authSlice';
 import storage from 'redux-persist/lib/storage';
 
@@ -13,5 +12,3 @@ export const persistedReducer = persistReducer(
   authPersistConfig,
   slice.reducer
 );
-
-// export const persistor = persistStore(store);

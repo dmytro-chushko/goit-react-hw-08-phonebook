@@ -1,14 +1,11 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { UserMenu } from './UserMenu';
-import { getToken } from 'redux/auth/getToken';
+import { useIsLoggedIn } from 'hooks/useIsLoggedIn';
 
 const Header = () => {
-  const isLoggedIn = useSelector(getToken);
-
   return (
     <>
-      {!isLoggedIn ? (
+      {!useIsLoggedIn() ? (
         <>
           <NavLink to="login">Login</NavLink>
           <NavLink to="register">Registration</NavLink>

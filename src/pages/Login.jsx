@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLoginUserMutation } from 'redux/auth/authOperations';
-import { setToken } from 'redux/auth/authSlice';
-// import { setIsLoggedIn, setUserName } from 'redux/contacts/contactsActions';
+import { authOperations, authSlice } from 'redux/auth';
+
+const { useLoginUserMutation } = authOperations;
+const { setToken } = authSlice;
 
 const Login = () => {
   const [email, setEmail] = useState('');

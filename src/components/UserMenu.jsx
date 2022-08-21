@@ -1,9 +1,8 @@
 import { useDispatch } from 'react-redux';
-import {
-  useGetUserQuery,
-  useLogOutUserMutation,
-} from 'redux/auth/authOperations';
-import { unsetToken } from 'redux/auth/authSlice';
+import { authOperations, authSlice } from 'redux/auth';
+
+const { useGetUserQuery, useLogOutUserMutation } = authOperations;
+const { unsetToken } = authSlice;
 
 export const UserMenu = () => {
   const dispatch = useDispatch();

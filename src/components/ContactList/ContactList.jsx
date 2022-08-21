@@ -1,18 +1,16 @@
 import { useSelector } from 'react-redux/es/exports';
-import { useGetContactsQuery } from 'redux/contacts/contactsOperations';
-import getFilter from 'redux/contacts/getFilter';
+import { contactsOperations, getFilter } from 'redux/contacts';
 import css from './ContactList.module.css';
 import { getVisibleContacts } from 'helpers/getVisibleContacts';
 
 import ContactItem from 'components/ContactItem';
 
-// const filter = useSelector(getFilter);
+const { useGetContactsQuery } = contactsOperations;
 
 const ContactList = () => {
   const { data: contacts, isLoading } = useGetContactsQuery();
-  console.log(contacts);
   const filter = useSelector(getFilter);
-  console.log(filter);
+
   return (
     <>
       <ul className={css.list}>
