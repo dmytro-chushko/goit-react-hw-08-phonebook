@@ -50,9 +50,9 @@ button {
   color: gray;
 }
 
-button:hover,
+/* button:hover,
 button:focus {
   outline: none;
   background-color: grey;
   color: #fff;
-}
+} */

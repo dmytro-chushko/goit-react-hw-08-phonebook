@@ -1,16 +1,9 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { authOperations, authSlice } from 'redux/auth';
+import { useForm } from 'react-hook-form';
 
-import {
-  Box,
-  TextField,
-  IconButton,
-  InputAdornment,
-  FormControl,
-  OutlinedInput,
-  InputLabel,
-} from '@mui/material';
+import { Box, TextField, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const { useRegisterUserMutation } = authOperations;
@@ -21,12 +14,31 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPass] = useState('');
   const [showPass, setShowPass] = useState(false);
+  const [showConfPass, setShowConfPass] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confPass: '',
+    },
+  });
+
+  const watchPass = watch('password', '');
 
   const [signUp] = useRegisterUserMutation();
   const dispatch = useDispatch();
 
-  const handleClickShowPass = () => {
-    setShowPass(!showPass);
+  const handleClickShowPass = (triggerState, trigger) => {
+    trigger(!triggerState);
   };
 
   const handleMouseDownPassword = event => {
@@ -34,29 +46,41 @@ const Register = () => {
     console.log('MouseDown');
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
+  const onSubmit = async ({ name, email, password }) => {
+    // e.preventDefault();
+    console.log('submit');
+
     const result = await signUp({ name, email, password });
     if (result.data) {
       dispatch(setToken(result.data.token));
     }
-    console.log(result.data);
+    reset();
+    // console.log(result.data);
 
-    setName('');
-    setEmail('');
-    setPass('');
+    // setName('');
+    // setEmail('');
+    // setPass('');
   };
 
   return (
     <Box>
       <h1>REGISTRATION</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           label="Name"
           type="text"
           variant="outlined"
           size="small"
           placeholder="Input your name"
+          error={!!errors?.name}
+          helperText={errors?.name ? errors?.name?.message : null}
+          {...register('name', {
+            required: 'Name is required',
+            maxLength: {
+              value: 20,
+              message: 'Only 20 symbols',
+            },
+          })}
         />
         <TextField
           label="Email"
@@ -64,47 +88,36 @@ const Register = () => {
           variant="outlined"
           size="small"
           placeholder="Input your email"
+          error={!!errors?.email}
+          helperText={errors?.email ? errors?.email?.message : null}
+          {...register('email', {
+            required: 'Email is required',
+            maxLength: {
+              value: 30,
+              message: 'Only 30 symbols',
+            },
+            pattern: {
+              value:
+                /^(([0-9A-Za-z]{1,})@([-0-9A-Za-z]{1,}.){1,2}[-A-Za-z]{2,})$/iu,
+              message: 'Email must be such view email@domein.com',
+            },
+          })}
         />
-        {/* <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showPass ? 'text' : 'password'}
-            value={password}
-            onChange={e => {
-              setPass(e.target.value);
-            }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPass}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPass ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl> */}
         <TextField
           label="Password"
           type={showPass ? 'text' : 'password'}
           variant="outlined"
           size="small"
-          sx={{ m: 1, width: '25ch' }}
           placeholder="Create a passowrd"
+          error={!!errors?.password}
+          helperText={errors?.password ? errors?.password?.message : null}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={handleClickShowPass}
-                  onMouseEnter={handleMouseDownPassword}
+                  onClick={() => handleClickShowPass(showPass, setShowPass)}
+                  onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
                   {showPass ? <VisibilityOff /> : <Visibility />}
@@ -112,8 +125,52 @@ const Register = () => {
               </InputAdornment>
             ),
           }}
+          {...register('password', {
+            required: 'Password is required',
+            minLength: {
+              value: 7,
+              message: 'Minimum 7 symbols',
+            },
+            maxLength: {
+              value: 30,
+              message: 'Only 30 symbols',
+            },
+          })}
         />
-        <label htmlFor="name">
+        <TextField
+          label="Password confirmation"
+          type={showConfPass ? 'text' : 'password'}
+          variant="outlined"
+          size="small"
+          placeholder="Confirm the passowrd"
+          error={!!errors?.confPass}
+          helperText={errors?.confPass ? errors?.confPass?.message : null}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={() =>
+                    handleClickShowPass(showConfPass, setShowConfPass)
+                  }
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showConfPass ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          {...register('confPass', {
+            required: 'Password is required',
+            validate: {
+              positive: value =>
+                value === watchPass || "Passwords doesn't match",
+            },
+          })}
+        />
+        {/* {console.log(watchPass, watchConfPass)} */}
+        {/* <label htmlFor="name">
           <p>Name</p>
           <input
             id="name"
@@ -148,7 +205,7 @@ const Register = () => {
             required
             onChange={e => setPass(e.target.value)}
           />
-        </label>
+        </label> */}
         <button type="submit">Registrate</button>
       </form>
     </Box>
