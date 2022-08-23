@@ -11,15 +11,17 @@ import {
   TextField,
   IconButton,
   InputAdornment,
+  Typography,
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
+import { Visibility, VisibilityOff, Login } from '@mui/icons-material';
 
 const { useLoginUserMutation } = authOperations;
 const { setToken } = authSlice;
 
-const Login = () => {
+const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const [login] = useLoginUserMutation();
+  const [login, { isLoading, error }] = useLoginUserMutation();
   const dispatch = useDispatch();
   const {
     register,
@@ -42,9 +44,17 @@ const Login = () => {
     reset();
   };
 
+  if (error) console.log(JSON.stringify(error.data));
+
   return (
-    <Box>
-      <h1>Sign In</h1>
+    <Box sx={{ maxWidth: '375px', mx: 'auto' }}>
+      <Typography
+        variant="h1"
+        align="center"
+        sx={{ mb: '10px', fontSize: '32px' }}
+      >
+        Sign In
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl fullWidth sx={{ gap: 1 }}>
           <TextField
@@ -92,21 +102,22 @@ const Login = () => {
             }}
             {...register('password', {
               required: 'Password is required',
-              minLength: {
-                value: 7,
-                message: 'Minimum 7 symbols',
-              },
-              maxLength: {
-                value: 30,
-                message: 'Only 30 symbols',
-              },
             })}
           />
-          <button type="submit">Sign in</button>
+          <LoadingButton
+            type="submit"
+            fullWidth
+            loadingPosition="start"
+            variant="contained"
+            loading={isLoading}
+            startIcon={<Login />}
+          >
+            Sign in
+          </LoadingButton>
         </FormControl>
       </form>
     </Box>
   );
 };
 
-export default Login;
+export default LoginForm;

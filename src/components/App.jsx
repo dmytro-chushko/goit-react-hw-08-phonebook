@@ -3,15 +3,16 @@ import { Routes, Route } from 'react-router-dom';
 
 import Header from './Header';
 import { PrivatRoute, PublicRoute } from './ProtectedRoutes';
+import { MainLoader } from './MainLoader';
 
-const Login = lazy(() => import('../pages/Login'));
+const LoginForm = lazy(() => import('../pages/LoginForm'));
 const Register = lazy(() => import('../pages/Register'));
 const Contacts = lazy(() => import('../pages/Contacts'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 
 const App = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<MainLoader />}>
       <Routes>
         <Route path="/" element={<Header />}>
           <Route
@@ -26,7 +27,7 @@ const App = () => {
             path="login"
             element={
               <PublicRoute path="/">
-                <Login />
+                <LoginForm />
               </PublicRoute>
             }
           />
