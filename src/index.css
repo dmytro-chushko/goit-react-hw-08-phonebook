@@ -3,9 +3,9 @@
 @import 'normalize.css';
 @import 'rsuite/dist/rsuite.min.css';
 
-* {
+/* * {
   box-sizing: content-box;
-}
+} */
 
 body {
   margin: 0;

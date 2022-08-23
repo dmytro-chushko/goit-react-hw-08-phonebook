@@ -10,12 +10,10 @@ const { useRegisterUserMutation } = authOperations;
 const { setToken } = authSlice;
 
 const Register = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPass] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [showConfPass, setShowConfPass] = useState(false);
-
+  const [signUp] = useRegisterUserMutation();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -31,11 +29,7 @@ const Register = () => {
       confPass: '',
     },
   });
-
   const watchPass = watch('password', '');
-
-  const [signUp] = useRegisterUserMutation();
-  const dispatch = useDispatch();
 
   const handleClickShowPass = (triggerState, trigger) => {
     trigger(!triggerState);
@@ -43,23 +37,14 @@ const Register = () => {
 
   const handleMouseDownPassword = event => {
     event.preventDefault();
-    console.log('MouseDown');
   };
 
   const onSubmit = async ({ name, email, password }) => {
-    // e.preventDefault();
-    console.log('submit');
-
     const result = await signUp({ name, email, password });
     if (result.data) {
       dispatch(setToken(result.data.token));
     }
     reset();
-    // console.log(result.data);
-
-    // setName('');
-    // setEmail('');
-    // setPass('');
   };
 
   return (

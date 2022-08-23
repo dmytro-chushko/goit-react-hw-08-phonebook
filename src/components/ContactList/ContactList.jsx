@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux/es/exports';
 import { contactsOperations, getFilter } from 'redux/contacts';
 import css from './ContactList.module.css';
-import { getVisibleContacts } from 'helpers/getVisibleContacts';
+import { getVisibleContacts } from 'helpers';
 
 import ContactItem from 'components/ContactItem';
 
