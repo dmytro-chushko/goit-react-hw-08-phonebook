@@ -1,42 +1,39 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { useForm } from 'react-hook-form';
-
 import { TextField, FormControl } from '@mui/material';
-import { PersonAdd } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-
-import {
-  useGetContactsQuery,
-  useAddContactMutation,
-} from 'redux/contacts/contactsOperations';
+import { Edit } from '@mui/icons-material';
+import { contactsOperations } from 'redux/contacts';
 import { isNameInContacts } from 'helpers';
 
-const ContactForm = () => {
+const { useGetContactsQuery, useUpdatingContactMutation } = contactsOperations;
+
+export const EditContactForm = ({ id }) => {
   const { data } = useGetContactsQuery();
-  const [addContact, { isLoading, error }] = useAddContactMutation();
+  const [updateContact, { isLoading, error }] = useUpdatingContactMutation();
+  const filteredData = data.filter(contact => contact.id === id);
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     getValues,
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      name: '',
-      number: '',
+      name: filteredData[0].name,
+      number: filteredData[0].number,
     },
   });
   const getName = getValues('name');
 
   const onSubmit = async ({ name, number }) => {
-    await addContact({ name, number });
+    console.log(name, number);
+    await updateContact(id, { name, number });
     if (error) {
       Notify.failure('Something wrong, check your connection');
       return;
     }
-    Notify.success('New contact has added');
-    reset();
+    Notify.success('Contact has updated');
   };
 
   return (
@@ -62,11 +59,11 @@ const ContactForm = () => {
               message:
                 "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan",
             },
-            validate: {
-              isName: () =>
-                !isNameInContacts(data, getName) ||
-                'This name allready exist in contacts list',
-            },
+            // validate: {
+            //   isName: () =>
+            //     !isNameInContacts(data, getName) ||
+            //     'This name allready exist in contacts list',
+            // },
           })}
         />
         <TextField
@@ -101,13 +98,11 @@ const ContactForm = () => {
           loadingPosition="start"
           variant="contained"
           loading={isLoading}
-          startIcon={<PersonAdd />}
+          startIcon={<Edit />}
         >
-          Add contact
+          Edit contact
         </LoadingButton>
       </FormControl>
     </form>
   );
 };
-
-export default ContactForm;

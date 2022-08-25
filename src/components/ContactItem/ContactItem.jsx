@@ -1,16 +1,15 @@
 import PropTypes from 'prop-types';
-import { Grid, Paper, Box, Typography } from '@mui/material';
-import { AccountCircle, PersonRemove } from '@mui/icons-material';
+import { useState } from 'react';
+import { Grid, Paper, Box, Typography, Button, Tooltip } from '@mui/material';
+import { AccountCircle, PersonRemove, Phone, Edit } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
-import css from './ContactItem.module.css';
 import { useDeleteContactMutation } from 'redux/contacts/contactsOperations';
-
-import { IoMdPerson } from 'react-icons/io';
-import { FaPhone, FaTrashAlt } from 'react-icons/fa';
-// import { Loader } from 'rsuite';
+import { ModalEditContact } from 'components/ModalEditContact';
 
 const ContactItem = ({ id, name, number }) => {
   const [deleteContact, { isLoading }] = useDeleteContactMutation();
+  const [elevation, setElevation] = useState(3);
+  const [open, setOpen] = useState(false);
 
   const handleClick = async id => {
     await deleteContact(id);
@@ -19,33 +18,50 @@ const ContactItem = ({ id, name, number }) => {
   return (
     <>
       <Grid item xs={12} sm={4} md={3}>
-        <Paper elevation={3}>
+        <Paper
+          elevation={elevation}
+          onMouseEnter={() => setElevation(8)}
+          onMouseLeave={() => setElevation(3)}
+        >
           <Box sx={{ p: 1 }}>
-            <Typography>
+            <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <AccountCircle /> {name}
             </Typography>
-            <Typography>
-              <FaPhone /> {number}
+            <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Phone /> {number}
             </Typography>
-            <Typography align="right">
-              <LoadingButton
-                aria-label="delete contact"
-                onClick={() => handleClick(id)}
-                loading={isLoading}
-                variant="contained"
-                sx={{ ml: 'auto' }}
-              >
-                <PersonRemove />
-              </LoadingButton>
+            <Typography align="center">
+              <Tooltip title="Edit contact">
+                <Button
+                  aria-label="edit contact"
+                  onClick={() => setOpen(true)}
+                  variant="contained"
+                  sx={{ mr: '10px' }}
+                >
+                  <Edit />
+                </Button>
+              </Tooltip>
+              <Tooltip title="Delete contact">
+                <LoadingButton
+                  aria-label="delete contact"
+                  onClick={() => handleClick(id)}
+                  loading={isLoading}
+                  variant="contained"
+                >
+                  <PersonRemove />
+                </LoadingButton>
+              </Tooltip>
             </Typography>
-
-            {/* <button type="button" onClick={() => handleClick(id)}>
-              {/* {pending ? <Loader size="sm" /> : <FaTrashAlt />} */}
-            {/* <FaTrashAlt />
-            </button> */}
           </Box>
         </Paper>
       </Grid>
+      <ModalEditContact
+        open={open}
+        setOpen={setOpen}
+        id={id}
+        name={name}
+        number={number}
+      />
     </>
   );
 };

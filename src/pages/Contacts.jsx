@@ -6,7 +6,6 @@ import {
   Typography,
   IconButton,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
 } from '@mui/material';
@@ -19,7 +18,7 @@ import Filter from 'components/Filter';
 const Contacts = () => {
   const [open, setOpen] = useState(false);
   return (
-    <>
+    <Box>
       <Typography
         variant="h1"
         align="center"
@@ -28,7 +27,12 @@ const Contacts = () => {
         CONTACTS
       </Typography>
       <Box sx={{ maxWidth: '375px', mx: 'auto' }}>
-        <Button variant="contained" onClick={() => setOpen(true)}>
+        <Button
+          variant="contained"
+          onClick={() => setOpen(true)}
+          fullWidth
+          sx={{ mb: '10px' }}
+        >
           Add contact
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
@@ -55,7 +59,7 @@ const Contacts = () => {
 
       <Filter />
       <ContactList />
-    </>
+    </Box>
   );
 };
 

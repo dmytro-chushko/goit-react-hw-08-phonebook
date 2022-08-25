@@ -2,29 +2,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setFilter } from 'redux/contacts/contactsFilterSlice';
 import { getFilter } from 'redux/contacts';
 import { nanoid } from 'nanoid';
-import css from './Filter.module.css';
 
-import { IoIosSearch } from 'react-icons/io';
+import { TextField, InputAdornment } from '@mui/material';
+import { Search } from '@mui/icons-material';
 
 const Filter = () => {
-  const inputFilterId = nanoid();
   const dispatch = useDispatch();
   const filter = useSelector(getFilter);
 
   return (
-    <>
-      <label className={css.labelTitle} htmlFor={inputFilterId}>
-        <p className={css.labelTitle}>Find contacts by name</p>
-        <input
-          id={inputFilterId}
-          className={css.input}
-          type="text"
-          value={filter}
-          onChange={e => dispatch(setFilter(e.currentTarget.value))}
-        />
-        <IoIosSearch className={css.searchIcon} />
-      </label>
-    </>
+    <TextField
+      label="Find your contacts by name"
+      type="text"
+      variant="outlined"
+      size="small"
+      value={filter}
+      placeholder="Begin to type name"
+      onChange={e => dispatch(setFilter(e.currentTarget.value))}
+      sx={{ mb: '10px' }}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <Search color="primary" />
+          </InputAdornment>
+        ),
+      }}
+    />
   );
 };
 

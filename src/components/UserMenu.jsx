@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { authOperations, authSlice } from 'redux/auth';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Logout } from '@mui/icons-material';
 
@@ -18,8 +18,26 @@ export const UserMenu = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <Box>{isLoadingQuery ? 'Loading' : `Wellcome ${data.name}`}</Box>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+      }}
+    >
+      <Box>
+        {isLoadingQuery ? (
+          'Loading'
+        ) : (
+          <>
+            Wellcome{' '}
+            <Typography variant="span" size="large" sx={{ fontWeight: '700' }}>
+              {data.name}
+            </Typography>
+          </>
+        )}
+      </Box>
       <LoadingButton
         type="button"
         onClick={handleClick}
@@ -28,7 +46,7 @@ export const UserMenu = () => {
         loading={isLoading}
         startIcon={<Logout />}
       >
-        quit
+        logout
       </LoadingButton>
     </Box>
   );
