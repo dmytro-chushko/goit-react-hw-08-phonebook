@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Notify } from 'notiflix';
 import { useState } from 'react';
 import { Grid, Paper, Box, Typography, Button, Tooltip } from '@mui/material';
 import { AccountCircle, PersonRemove, Phone, Edit } from '@mui/icons-material';
@@ -19,6 +20,7 @@ const ContactItem = ({ id, name, number }) => {
       fetchErrorHendler(result.error.status);
       return;
     }
+    Notify.success('Contacts has deleted');
   };
 
   return (
