@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgoit_react_hw_08_phonebook=self.webpackChunkgoit_react_hw_08_phonebook||[]).push([[805],{9805:function(e,n,o){o.r(n);var t=o(3329);n.default=function(){return(0,t.jsx)("h1",{children:"This page not found"})}}}]);
+//# sourceMappingURL=805.0bf49645.chunk.js.map
