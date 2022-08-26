@@ -4,7 +4,9 @@ import { Grid, Paper, Box, Typography, Button, Tooltip } from '@mui/material';
 import { AccountCircle, PersonRemove, Phone, Edit } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { useDeleteContactMutation } from 'redux/contacts/contactsOperations';
-import { ModalEditContact } from 'components/ModalEditContact';
+import { ModalOfContacts } from 'components/ModalOfContacts';
+import { EditContactForm } from 'components/Forms';
+import { fetchErrorHendler } from 'helpers';
 
 const ContactItem = ({ id, name, number }) => {
   const [deleteContact, { isLoading }] = useDeleteContactMutation();
@@ -12,7 +14,11 @@ const ContactItem = ({ id, name, number }) => {
   const [open, setOpen] = useState(false);
 
   const handleClick = async id => {
-    await deleteContact(id);
+    const result = await deleteContact(id);
+    if (result.error) {
+      fetchErrorHendler(result.error.status);
+      return;
+    }
   };
 
   return (
@@ -55,13 +61,9 @@ const ContactItem = ({ id, name, number }) => {
           </Box>
         </Paper>
       </Grid>
-      <ModalEditContact
-        open={open}
-        setOpen={setOpen}
-        id={id}
-        name={name}
-        number={number}
-      />
+      <ModalOfContacts open={open} setOpen={setOpen}>
+        <EditContactForm id={id} />
+      </ModalOfContacts>
     </>
   );
 };

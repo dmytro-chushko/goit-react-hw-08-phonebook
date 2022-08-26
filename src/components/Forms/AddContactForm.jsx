@@ -9,11 +9,11 @@ import {
   useGetContactsQuery,
   useAddContactMutation,
 } from 'redux/contacts/contactsOperations';
-import { isNameInContacts } from 'helpers';
+import { isNameInContacts, fetchErrorHendler } from 'helpers';
 
-const ContactForm = () => {
-  const { data } = useGetContactsQuery();
-  const [addContact, { isLoading, error }] = useAddContactMutation();
+export const AddContactForm = () => {
+  const { data, error } = useGetContactsQuery();
+  const [addContact, { isLoading }] = useAddContactMutation();
   const {
     register,
     handleSubmit,
@@ -27,17 +27,21 @@ const ContactForm = () => {
       number: '',
     },
   });
-  const getName = getValues('name');
 
   const onSubmit = async ({ name, number }) => {
-    await addContact({ name, number });
-    if (error) {
-      Notify.failure('Something wrong, check your connection');
+    const result = await addContact({ name, number });
+    if (result.error) {
+      fetchErrorHendler(result.error.status);
       return;
     }
     Notify.success('New contact has added');
     reset();
   };
+
+  if (error)
+    Notify.failure(
+      'Something wrong, check your internet connection and try later'
+    );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,9 +67,11 @@ const ContactForm = () => {
                 "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan",
             },
             validate: {
-              isName: () =>
-                !isNameInContacts(data, getName) ||
-                'This name allready exist in contacts list',
+              isName: () => {
+                const getName = getValues('name');
+                const isName = !isNameInContacts(data, getName);
+                return isName || 'This name allready exist in contacts list';
+              },
             },
           })}
         />
@@ -109,5 +115,3 @@ const ContactForm = () => {
     </form>
   );
 };
-
-export default ContactForm;

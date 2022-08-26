@@ -1,17 +1,9 @@
 import { useState } from 'react';
 
-import {
-  Box,
-  Button,
-  Typography,
-  IconButton,
-  Dialog,
-  DialogContent,
-  DialogActions,
-} from '@mui/material';
-import { Close } from '@mui/icons-material';
+import { Box, Button, Typography } from '@mui/material';
 
-import ContactForm from 'components/ContactForm';
+import { ModalOfContacts } from 'components/ModalOfContacts';
+import { AddContactForm } from 'components/Forms';
 import ContactList from 'components/ContactList';
 import Filter from 'components/Filter';
 
@@ -35,28 +27,10 @@ const Contacts = () => {
         >
           Add contact
         </Button>
-        <Dialog open={open} onClose={() => setOpen(false)}>
-          <DialogActions sx={{ p: 0 }}>
-            <IconButton
-              aria-label="close"
-              variant="contained"
-              onClick={() => setOpen(false)}
-              sx={{
-                position: 'absolute',
-                right: 0,
-                top: 0,
-                p: 0,
-              }}
-            >
-              <Close />
-            </IconButton>
-          </DialogActions>
-          <DialogContent sx={{ maxWidth: '375px' }}>
-            <ContactForm />
-          </DialogContent>
-        </Dialog>
+        <ModalOfContacts open={open} setOpen={setOpen}>
+          <AddContactForm />
+        </ModalOfContacts>
       </Box>
-
       <Filter />
       <ContactList />
     </Box>

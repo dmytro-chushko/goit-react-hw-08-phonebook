@@ -25,10 +25,7 @@ export const store = configureStore({
   middleware: getDefaultMiddleware => [
     ...getDefaultMiddleware({
       thunk: {
-        extraArgument: userAuthApi,
-      },
-      thunk: {
-        extraArgument: contactsApi,
+        extraArgument: { userAuthApi, contactsApi },
       },
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

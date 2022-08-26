@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { authOperations, authSlice } from 'redux/auth';
+import {
+  handleClickShowPass,
+  handleMouseDownPassword,
+  fetchErrorHendler,
+} from 'helpers';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -39,16 +44,12 @@ const Register = () => {
   });
   const watchPass = watch('password', '');
 
-  const handleClickShowPass = (triggerState, trigger) => {
-    trigger(!triggerState);
-  };
-
-  const handleMouseDownPassword = event => {
-    event.preventDefault();
-  };
-
   const onSubmit = async ({ name, email, password }) => {
     const result = await signUp({ name, email, password });
+    if (result.error) {
+      fetchErrorHendler(result.error.status);
+      return;
+    }
     if (result.data) {
       dispatch(setToken(result.data.token));
     }

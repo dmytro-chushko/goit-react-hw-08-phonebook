@@ -3,7 +3,11 @@ import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
 import { authOperations, authSlice } from 'redux/auth';
-import { handleClickShowPass, handleMouseDownPassword } from 'helpers';
+import {
+  handleClickShowPass,
+  handleMouseDownPassword,
+  fetchErrorHendler,
+} from 'helpers';
 
 import {
   Box,
@@ -21,7 +25,7 @@ const { setToken } = authSlice;
 
 const LoginForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const [login, { isLoading, error }] = useLoginUserMutation();
+  const [login, { isLoading }] = useLoginUserMutation();
   const dispatch = useDispatch();
   const {
     register,
@@ -38,13 +42,15 @@ const LoginForm = () => {
 
   const onSubmit = async ({ email, password }) => {
     const result = await login({ email, password });
+    if (result.error) {
+      fetchErrorHendler(result.error.status);
+      return;
+    }
     if (result.data) {
       dispatch(setToken(result.data.token));
     }
     reset();
   };
-
-  if (error) console.log(JSON.stringify(error.data));
 
   return (
     <Box sx={{ maxWidth: '375px', mx: 'auto' }}>

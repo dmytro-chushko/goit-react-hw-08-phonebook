@@ -3,14 +3,11 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
-  TextField,
   IconButton,
 } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 import { Close } from '@mui/icons-material';
-import { EditContactForm } from './EditContactForm';
 
-export const ModalEditContact = ({ open, setOpen, id, name, number }) => {
+export const ModalOfContacts = ({ open, setOpen, children }) => {
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogActions sx={{ p: 0 }}>
@@ -28,14 +25,12 @@ export const ModalEditContact = ({ open, setOpen, id, name, number }) => {
           <Close />
         </IconButton>
       </DialogActions>
-      <DialogContent sx={{ maxWidth: '375px' }}>
-        <EditContactForm id={id} />
-      </DialogContent>
+      <DialogContent sx={{ maxWidth: '375px' }}>{children}</DialogContent>
     </Dialog>
   );
 };
 
-ModalEditContact.propTypes = {
+ModalOfContacts.propTypes = {
   open: PropTypes.bool.isRequired,
   setOpen: PropTypes.func.isRequired,
 };

@@ -4,14 +4,15 @@ import { TextField, FormControl } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Edit } from '@mui/icons-material';
 import { contactsOperations } from 'redux/contacts';
-import { isNameInContacts } from 'helpers';
+import { isNameInContacts, fetchErrorHendler } from 'helpers';
 
 const { useGetContactsQuery, useUpdatingContactMutation } = contactsOperations;
 
 export const EditContactForm = ({ id }) => {
-  const { data } = useGetContactsQuery();
-  const [updateContact, { isLoading, error }] = useUpdatingContactMutation();
+  const { data, error } = useGetContactsQuery();
+  const [updateContact, { isLoading }] = useUpdatingContactMutation();
   const filteredData = data.filter(contact => contact.id === id);
+  const restData = data.filter(contact => contact.id !== id);
   const {
     register,
     handleSubmit,
@@ -24,17 +25,20 @@ export const EditContactForm = ({ id }) => {
       number: filteredData[0].number,
     },
   });
-  const getName = getValues('name');
 
   const onSubmit = async ({ name, number }) => {
-    console.log(name, number);
-    await updateContact(id, { name, number });
-    if (error) {
-      Notify.failure('Something wrong, check your connection');
+    const result = await updateContact({ id, ...{ name, number } });
+    if (result.error) {
+      fetchErrorHendler(result.error.status);
       return;
     }
     Notify.success('Contact has updated');
   };
+
+  if (error)
+    Notify.failure(
+      'Something wrong, check your internet connection and try later'
+    );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -59,11 +63,13 @@ export const EditContactForm = ({ id }) => {
               message:
                 "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan",
             },
-            // validate: {
-            //   isName: () =>
-            //     !isNameInContacts(data, getName) ||
-            //     'This name allready exist in contacts list',
-            // },
+            validate: {
+              isName: () => {
+                const getName = getValues('name');
+                const isName = !isNameInContacts(restData, getName);
+                return isName || 'This name allready exist in contacts list';
+              },
+            },
           })}
         />
         <TextField

@@ -12,7 +12,7 @@ const Header = () => {
         p: 1,
       }}
     >
-      <Box sx={{ border: '5px solid lightblue', p: '10px' }}>
+      <Box sx={{ p: '10px' }}>
         <Box sx={{ display: 'flex', gap: 1 }}>
           {!useIsLoggedIn() ? (
             <>
