@@ -99,7 +99,7 @@ const Register = () => {
               },
               pattern: {
                 value:
-                  /^(([0-9A-Za-z]{1,})@([-0-9A-Za-z]{1,}.){1,2}[-A-Za-z]{2,})$/iu,
+                  /^(([0-9A-Za-z._%+-]{1,})@([-0-9A-Za-z]{1,}.){1,2}[-A-Za-z]{2,})$/iu,
                 message: 'Email must be such view email@domein.com',
               },
             })}
